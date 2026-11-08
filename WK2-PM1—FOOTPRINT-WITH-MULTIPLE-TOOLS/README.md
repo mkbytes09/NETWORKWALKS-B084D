@@ -132,3 +132,207 @@ whois networkwalks.com
 **Defensive note:** Enable WHOIS privacy protection and use role-based email addresses rather than personal ones.
 
 ---
+
+### 5.2 whatweb
+
+**Definition:**
+`whatweb` is a web scanner that identifies the technologies behind a website. It uses a large plugin database to recognise content management systems, web servers, programming languages, JavaScript libraries, analytics tools, and version numbers from page content, headers, cookies and HTML patterns.
+
+**How attackers use it:**
+- Discover the **web server and version** (e.g. Apache, Nginx, IIS) and the **CMS** (e.g. WordPress, Joomla, Drupal).
+- Match detected software versions against public vulnerability databases (CVE / Exploit-DB) to **choose a known exploit**.
+- Identify frameworks, plugins and languages (PHP, ASP.NET, jQuery, etc.) to narrow down attack techniques such as SQL injection, XSS or file upload flaws.
+- Detect interesting headers, cookies and e-mail addresses exposed on pages.
+
+**Command used:**
+```bash
+whatweb networkwalks.com
+# Optional verbose output
+whatweb -v networkwalks.com
+```
+
+**Evidence – WHATWEB-TOOL-RESULT:**
+
+![WHATWEB-TOOL-RESULT](./Evidences-and-POCs/WHATWEB-TOOL-RESULT.png)
+
+**Key observations:**
+- Web server: `<fill in>`
+- CMS / framework: `<fill in>`
+- Programming language / libraries: `<fill in>`
+- Other notable findings: `<fill in>`
+
+**Defensive note:** Remove or obfuscate version banners, keep software patched, and delete unused plugins.
+
+---
+
+### 5.3 nslookup
+
+**Definition:**
+`nslookup` is a network administration tool for querying the Domain Name System (DNS). It translates domain names into IP addresses (and the reverse) and can request specific record types such as A, MX, NS and TXT from a chosen DNS server.
+
+**How attackers use it:**
+- Resolve the domain to its **IP address**, which becomes the target for port scanning and vulnerability scanning.
+- Determine whether the site sits behind a **CDN or reverse proxy** (e.g. Cloudflare), since the resolved IP may not be the real origin server.
+- Query **MX records** to learn about mail infrastructure and **NS records** to find authoritative name servers.
+- Query **TXT records** to learn about SPF, DKIM, DMARC and third-party service verification tokens.
+- Perform **reverse lookups** to map IPs back to hostnames.
+
+**Commands used:**
+```bash
+nslookup networkwalks.com
+# Optional record-specific queries
+nslookup -type=MX networkwalks.com
+nslookup -type=NS networkwalks.com
+nslookup -type=TXT networkwalks.com
+```
+
+**Evidence – NSLOOKUP-TOOL-RESULT:**
+
+![NSLOOKUP-TOOL-RESULT](./Evidences-and-POCs/NSLOOKUP-TOOL-RESULT.png)
+
+**Key observations:**
+- Resolved IPv4 address(es): `<fill in>`
+- Resolved IPv6 address(es): `<fill in>`
+- DNS server used: `<fill in>`
+- Indication of CDN / hosting provider: `<fill in>`
+
+**Defensive note:** Restrict origin servers so they only accept traffic from the CDN/WAF, and avoid exposing internal hostnames in public DNS.
+
+---
+
+### 5.4 curl -I
+
+**Definition:**
+`curl` is a command-line tool for transferring data using many protocols, including HTTP and HTTPS. The `-I` (`--head`) option sends an HTTP **HEAD** request and displays only the response headers without downloading the page body.
+
+**How attackers use it:**
+- Read the **`Server`** and **`X-Powered-By`** headers to identify the web server, language and version.
+- Check **status codes and redirects** (`301`, `302`, `403`, `404`) to understand site structure and HTTP-to-HTTPS behaviour.
+- Review **security headers** such as `Strict-Transport-Security`, `Content-Security-Policy`, `X-Frame-Options` and `X-Content-Type-Options`. **Missing headers** point to potential weaknesses such as clickjacking or XSS.
+- Inspect **cookies** (`Set-Cookie`) for missing `Secure`, `HttpOnly` or `SameSite` flags.
+- Spot headers that reveal **CDN/WAF presence** (e.g. `CF-RAY`, `X-Sucuri-ID`, `Via`).
+
+**Command used:**
+```bash
+curl -I http://networkwalks.com
+curl -I https://networkwalks.com
+```
+
+**Evidence – CURL-TOOL-RESULT:**
+
+![CURL-TOOL-RESULT](./Evidences-and-POCs/CURL-TOOL-RESULT.png)
+
+**Key observations:**
+- HTTP status code: `<fill in>`
+- `Server` header: `<fill in>`
+- Security headers present / missing: `<fill in>`
+- Cookies / redirects: `<fill in>`
+
+**Defensive note:** Suppress verbose banner headers and enforce a complete set of security headers.
+
+---
+
+### 5.5 wafw00f
+
+**Definition:**
+`wafw00f` is a Python tool that detects and fingerprints **Web Application Firewalls (WAFs)**. It sends a normal HTTP request followed by a series of benign-but-suspicious requests and analyses the responses (headers, cookies, status codes, block pages) to determine whether a WAF is present and which product it is.
+
+**How attackers use it:**
+- Learn **whether a WAF is present** before launching attacks, because blind payloads (SQLi, XSS, etc.) will likely be blocked and may get the attacker's IP banned.
+- Identify the **WAF vendor** (e.g. Cloudflare, Akamai, AWS WAF, ModSecurity, Imperva) and then research **known bypass techniques** specific to that product.
+- Adjust payload encoding, request rate and attack technique to **evade detection**.
+- If **no WAF** is detected, the attacker knows the application is likely directly exposed and can attack more aggressively.
+
+**Command used:**
+```bash
+wafw00f https://networkwalks.com
+```
+
+**Evidence – WAFW00F-TOOL-RESULT:**
+
+![WAFW00F-TOOL-RESULT](./Evidences-and-POCs/WAFW00F-TOOL-RESULT.png)
+
+**Key observations:**
+- WAF detected: `<Yes / No>`
+- WAF vendor / product: `<fill in>`
+- Notes: `<fill in>`
+
+**Defensive note:** Keep WAF rule sets updated, enable rate limiting, and do not rely on a WAF as the only security control.
+
+---
+
+### 5.6 dnsrecon
+
+**Definition:**
+`dnsrecon` is a DNS enumeration and reconnaissance tool. It can query standard record types (SOA, NS, A, AAAA, MX, TXT, SRV), attempt **zone transfers (AXFR)**, perform **reverse lookups** across IP ranges, brute-force subdomains with wordlists, and check for wildcard DNS.
+
+**How attackers use it:**
+- Build a **complete map of the target's DNS footprint**, including subdomains such as `dev.`, `staging.`, `vpn.`, `mail.` and `admin.`, which are often less protected than the main site.
+- Attempt a **zone transfer**. A misconfigured name server may hand over the entire zone, revealing internal hosts and IP addresses.
+- Discover **mail servers, name servers and third-party services** through MX, NS and TXT records.
+- Find **SPF/DMARC weaknesses** that allow email spoofing.
+- Identify additional IP addresses and netblocks to expand port scanning scope.
+
+**Command used:**
+```bash
+dnsrecon -d networkwalks.com
+# Optional: standard enumeration
+dnsrecon -d networkwalks.com -t std
+```
+
+**Evidence – DNSRECON-TOOL-RESULT:**
+
+![DNSRECON-TOOL-RESULT](./Evidences-and-POCs/DNSRECON-TOOL-RESULT.png)
+
+**Key observations:**
+- Name servers: `<fill in>`
+- A / AAAA records: `<fill in>`
+- MX records: `<fill in>`
+- TXT records (SPF / DMARC / verification tokens): `<fill in>`
+- Zone transfer result: `<fill in>`
+
+**Defensive note:** Disable unrestricted zone transfers, remove stale DNS records, and publish strict SPF/DKIM/DMARC policies.
+
+---
+
+## 6. Disclaimer
+
+This project was carried out **for educational and authorised security-testing purposes only**. All reconnaissance activities were performed against a target for which **explicit written permission** was obtained from the owner. No exploitation, denial-of-service, or unauthorised access was attempted.
+
+The tools and techniques described in this report must **not** be used against any system, network or domain without prior written authorisation. Unauthorised scanning or probing may violate computer-misuse and cybercrime laws (for example the Prevention of Electronic Crimes Act in Pakistan, the CFAA in the United States, or the Computer Misuse Act in the United Kingdom) and may result in criminal and civil penalties. The author accepts **no responsibility** for any misuse of the information contained in this document.
+
+---
+
+## 7. Conclusion
+
+This module demonstrated how much information can be gathered about a target using only a handful of standard Kali Linux tools and without exploiting any vulnerability:
+
+- **whois** exposed domain ownership and registration details.
+- **whatweb** and **curl -I** revealed the web technologies, server information and the state of HTTP security headers.
+- **nslookup** and **dnsrecon** mapped the domain to IP addresses and exposed the DNS infrastructure and records.
+- **wafw00f** showed whether a Web Application Firewall stands between an attacker and the application.
+
+Together, these results give an attacker a clear starting profile of the target, which is exactly why reconnaissance is such a critical phase. For defenders, the key lessons are to **minimise information leakage** (hide version banners, enable WHOIS privacy, remove unnecessary DNS records), **harden configurations** (security headers, restricted zone transfers, SPF/DKIM/DMARC), and **layer defences** (WAF plus patching plus monitoring). Regularly performing this same footprinting exercise against one's own assets helps identify and close exposure before a real attacker finds it.
+
+**Summary of findings for `networkwalks.com`:** `<add 2–4 sentences summarising your actual results and any recommendations>`
+
+---
+
+## 8. References
+
+1. MITRE ATT&CK – Reconnaissance (TA0043): <https://attack.mitre.org/tactics/TA0043/>
+2. OWASP Web Security Testing Guide – Information Gathering: <https://owasp.org/www-project-web-security-testing-guide/>
+3. NIST SP 800-115 – Technical Guide to Information Security Testing and Assessment: <https://csrc.nist.gov/publications/detail/sp/800-115/final>
+4. RFC 3912 – WHOIS Protocol Specification: <https://www.rfc-editor.org/rfc/rfc3912>
+5. RFC 1034 – Domain Names: Concepts and Facilities: <https://www.rfc-editor.org/rfc/rfc1034>
+6. RFC 9110 – HTTP Semantics: <https://www.rfc-editor.org/rfc/rfc9110>
+7. Kali Linux Tools – whois: <https://www.kali.org/tools/whois/>
+8. Kali Linux Tools – whatweb: <https://www.kali.org/tools/whatweb/>
+9. Kali Linux Tools – dnsutils (nslookup): <https://www.kali.org/tools/bind9/>
+10. curl Manual – `-I, --head`: <https://curl.se/docs/manpage.html>
+11. Kali Linux Tools – wafw00f: <https://www.kali.org/tools/wafw00f/>
+12. wafw00f GitHub (EnableSecurity): <https://github.com/EnableSecurity/wafw00f>
+13. WhatWeb GitHub (urbanadventurer): <https://github.com/urbanadventurer/WhatWeb>
+14. Kali Linux Tools – dnsrecon: <https://www.kali.org/tools/dnsrecon/>
+15. dnsrecon GitHub (darkoperator): <https://github.com/darkoperator/dnsrecon>
+
