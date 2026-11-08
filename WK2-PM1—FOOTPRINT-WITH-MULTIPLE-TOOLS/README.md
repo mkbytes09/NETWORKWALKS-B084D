@@ -121,7 +121,7 @@ whois networkwalks.com
 
 **Evidence – WHOIS-TOOL-RESULT:**
 
-![WHOIS-TOOL-RESULT](WK2-PM1—FOOTPRINT-WITH-MULTIPLE-TOOLS/Evidences-and-POCse/WHOIS-TOOL-RESULT.png)
+![WHOIS-TOOL-RESULT](Evidences-and-POCse/WHOIS-TOOL-RESULT.png)
 
 **Key observations:**
 - Registrar: `<fill in>`
