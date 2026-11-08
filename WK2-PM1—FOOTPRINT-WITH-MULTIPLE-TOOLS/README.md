@@ -1,1 +1,8 @@
-In this directory I performed a Recon.
+## WEEK 2 | PROJECT MODULE 1
+
+<div align="center">
+
+### FOOTPRINTING & RECONNAISSANCE ATTACKS
+**WITH MULTIPLE KALI TOOLS**
+
+</div>
