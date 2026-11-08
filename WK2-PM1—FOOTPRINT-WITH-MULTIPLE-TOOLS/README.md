@@ -124,10 +124,10 @@ whois networkwalks.com
 ![WHOIS-TOOL-RESULT](./Evidences-and-POCs/WHOIS-TOOL-RESULT.png)
 
 **Key observations:**
-- Registrar: `<fill in>`
-- Creation / expiry date: `<fill in>`
-- Name servers: `<fill in>`
-- Registrant privacy / redaction: `<fill in>`
+- Registrar: `GoDaddy.com, LLC`
+- Creation date: `2019-11-06`
+- Name servers: `NS6135.HOSTGATOR.COM`
+- Expiry date: `2027-11-06`
 
 **Defensive note:** Enable WHOIS privacy protection and use role-based email addresses rather than personal ones.
 
