@@ -158,8 +158,7 @@ whatweb -v networkwalks.com
 **Key observations:**
 - Web server: `Apache (HTTPServer[Apache])`
 - CMS / framework: WordPress, version 7.1.4, taken from the `MetaGenerator`
-- Programming language / libraries: `<fill in>`
-- Other notable findings: PHP implied by `WordPress.`
+- Programming language / libraries: PHP implied by `WordPress.`
 
 **Defensive note:** Remove or obfuscate version banners, keep software patched, and delete unused plugins.
 
