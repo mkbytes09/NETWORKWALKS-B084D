@@ -156,10 +156,10 @@ whatweb -v networkwalks.com
 ![WHATWEB-TOOL-RESULT](./Evidences-and-POCs/WHATWEB-TOOL-RESULT.png)
 
 **Key observations:**
-- Web server: `<fill in>`
-- CMS / framework: `<fill in>`
+- Web server: `Apache (HTTPServer[Apache])`
+- CMS / framework: WordPress, version 7.1.4, taken from the `MetaGenerator`
 - Programming language / libraries: `<fill in>`
-- Other notable findings: `<fill in>`
+- Other notable findings: PHP implied by `WordPress.`
 
 **Defensive note:** Remove or obfuscate version banners, keep software patched, and delete unused plugins.
 
@@ -191,10 +191,9 @@ nslookup -type=TXT networkwalks.com
 ![NSLOOKUP-TOOL-RESULT](./Evidences-and-POCs/NSLOOKUP-TOOL-RESULT.png)
 
 **Key observations:**
-- Resolved IPv4 address(es): `<fill in>`
-- Resolved IPv6 address(es): `<fill in>`
-- DNS server used: `<fill in>`
-- Indication of CDN / hosting provider: `<fill in>`
+- Resolved IPv4 address(es): `192.168.140.203`
+- Resolved IPv6 address(es): `192.232.216.135`
+- DNS server used: `192.168.140.203`
 
 **Defensive note:** Restrict origin servers so they only accept traffic from the CDN/WAF, and avoid exposing internal hostnames in public DNS.
 
@@ -223,10 +222,10 @@ curl -I https://networkwalks.com
 ![CURL-TOOL-RESULT](./Evidences-and-POCs/CURL-TOOL-RESULT.png)
 
 **Key observations:**
-- HTTP status code: `<fill in>`
-- `Server` header: `<fill in>`
-- Security headers present / missing: `<fill in>`
-- Cookies / redirects: `<fill in>`
+- HTTP status code: `HTTP/2 200`
+- `Server` header: `Apache`
+- Security headers present / missing: `permissions-policy` `referrer-policy` / `Content-Security-Policy` `Strict-Transport-Security`
+- Cookies / redirects: `<wpdm_client` is set with secure, `HttpOnly`, path=/ and `domain=networkwalks.com`
 
 **Defensive note:** Suppress verbose banner headers and enforce a complete set of security headers.
 
@@ -253,9 +252,8 @@ wafw00f https://networkwalks.com
 ![WAFW00F-TOOL-RESULT](./Evidences-and-POCs/WAFW00F-TOOL-RESULT.png)
 
 **Key observations:**
-- WAF detected: `<Yes / No>`
-- WAF vendor / product: `<fill in>`
-- Notes: `<fill in>`
+- WAF detected: `Yes`
+- WAF vendor / product: `ModSecurity`
 
 **Defensive note:** Keep WAF rule sets updated, enable rate limiting, and do not rely on a WAF as the only security control.
 
@@ -284,13 +282,6 @@ dnsrecon -d networkwalks.com -t std
 
 ![DNSRECON-TOOL-RESULT](./Evidences-and-POCs/DNSRECON-TOOL-RESULT.png)
 
-**Key observations:**
-- Name servers: `<fill in>`
-- A / AAAA records: `<fill in>`
-- MX records: `<fill in>`
-- TXT records (SPF / DMARC / verification tokens): `<fill in>`
-- Zone transfer result: `<fill in>`
-
 **Defensive note:** Disable unrestricted zone transfers, remove stale DNS records, and publish strict SPF/DKIM/DMARC policies.
 
 ---
@@ -313,8 +304,6 @@ This module demonstrated how much information can be gathered about a target usi
 - **wafw00f** showed whether a Web Application Firewall stands between an attacker and the application.
 
 Together, these results give an attacker a clear starting profile of the target, which is exactly why reconnaissance is such a critical phase. For defenders, the key lessons are to **minimise information leakage** (hide version banners, enable WHOIS privacy, remove unnecessary DNS records), **harden configurations** (security headers, restricted zone transfers, SPF/DKIM/DMARC), and **layer defences** (WAF plus patching plus monitoring). Regularly performing this same footprinting exercise against one's own assets helps identify and close exposure before a real attacker finds it.
-
-**Summary of findings for `networkwalks.com`:** `<add 2–4 sentences summarising your actual results and any recommendations>`
 
 ---
 
