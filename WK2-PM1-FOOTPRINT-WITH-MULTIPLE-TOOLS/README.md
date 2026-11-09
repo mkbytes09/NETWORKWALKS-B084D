@@ -121,7 +121,7 @@ whois networkwalks.com
 
 **Evidence – WHOIS-TOOL-RESULT:**
 
-![WHOIS-TOOL-RESULT](./Evidences-and-POCs/WHOIS-TOOL-RESULT.png)
+![WHOIS-TOOL-RESULT](./Evidences-W2-M1/WHOIS-TOOL-RESULT.png)
 
 **Key observations:**
 - Registrar: `GoDaddy.com, LLC`
@@ -153,7 +153,7 @@ whatweb -v networkwalks.com
 
 **Evidence – WHATWEB-TOOL-RESULT:**
 
-![WHATWEB-TOOL-RESULT](./Evidences-and-POCs/WHATWEB-TOOL-RESULT.png)
+![WHATWEB-TOOL-RESULT](./Evidences-W2-M1/WHATWEB-TOOL-RESULT.png)
 
 **Key observations:**
 - Web server: `Apache (HTTPServer[Apache])`
@@ -187,7 +187,7 @@ nslookup -type=TXT networkwalks.com
 
 **Evidence – NSLOOKUP-TOOL-RESULT:**
 
-![NSLOOKUP-TOOL-RESULT](./Evidences-and-POCs/NSLOOKUP-TOOL-RESULT.png)
+![NSLOOKUP-TOOL-RESULT](./Evidences-W2-M1/NSLOOKUP-TOOL-RESULT.png)
 
 **Key observations:**
 - Resolved IPv4 address(es): `192.168.140.203`
@@ -218,7 +218,7 @@ curl -I https://networkwalks.com
 
 **Evidence – CURL-TOOL-RESULT:**
 
-![CURL-TOOL-RESULT](./Evidences-and-POCs/CURL-TOOL-RESULT.png)
+![CURL-TOOL-RESULT](./Evidences-W2-M1/CURL-TOOL-RESULT.png)
 
 **Key observations:**
 - HTTP status code: `HTTP/2 200`
@@ -248,7 +248,7 @@ wafw00f https://networkwalks.com
 
 **Evidence – WAFW00F-TOOL-RESULT:**
 
-![WAFW00F-TOOL-RESULT](./Evidences-and-POCs/WAFW00F-TOOL-RESULT.png)
+![WAFW00F-TOOL-RESULT](./Evidences-W2-M1/WAFW00F-TOOL-RESULT.png)
 
 **Key observations:**
 - WAF detected: `Yes`
@@ -279,7 +279,7 @@ dnsrecon -d networkwalks.com -t std
 
 **Evidence – DNSRECON-TOOL-RESULT:**
 
-![DNSRECON-TOOL-RESULT](./Evidences-and-POCs/DNSRECON-TOOL-RESULT.png)
+![DNSRECON-TOOL-RESULT](./Evidences-W2-M1/DNSRECON-TOOL-RESULT.png)
 
 **Defensive note:** Disable unrestricted zone transfers, remove stale DNS records, and publish strict SPF/DKIM/DMARC policies.
 
