@@ -108,7 +108,7 @@ The available sign-in methods presented by Maltego (new ID vs. existing ID) befo
 
 **Step 3 — Create Maltego ID**
 
-![Create-Maltego-ID](./Evidences-W2-M3e/Create-Maltego-ID.png)
+![Create-Maltego-ID](./Evidences-W2-M3/Create-Maltego-ID.png)
 
 Registration screen used to create a new Maltego ID required to activate the Transform Hub.
 
