@@ -1,14 +1,14 @@
 <div align="center">
   
-**WEEK 2 | PROJECT MODULE 3**
+**WEEK 2 | PROJECT MODULE 4**
   
-# FOOTPRINTING & EMAIL HARVESTING
-# WITH MALTEGO IN KALI LINUX
+# FOOTPRINTING WITH theHarvester
 
 </div>
 
-> **Target:** `networkwalks.com` (written permission obtained)
-> **Platform:** Kali Linux / Maltego Community Edition (CE)
+> **Target organization:** microsoft.com
+> **Platform:** Kali Linux
+> **Findings file:** `Findings-W2-M4.docx`
 > **Author:** `Muhammad Kamil`
 > **Date:** `12-11-2026`
 
@@ -21,9 +21,10 @@
 3. [Deliverables](#3-deliverables)
 4. [Tools Used](#4-tools-used)
 5. [Tool Definition, Attacker Usage & Evidence](#5-tool-definition-attacker-usage--evidence)
-   - [5.1 Maltego – Definition](#51-maltego--definition)
-   - [5.2 How Attackers Use Maltego](#52-how-attackers-use-maltego)
-   - [5.3 Evidence Walkthrough](#53-evidence-walkthrough)
+   - [5.1 theHarvester – Definition](#51-theharvester--definition)
+   - [5.2 How Attackers Use theHarvester](#52-how-attackers-use-theharvester)
+   - [5.3 Task 1 – Baidu Source, Limit 1000](#53-task-1--baidu-source-limit-1000)
+   - [5.4 Task 2 – All Sources, Limit 50](#54-task-2--all-sources-limit-50)
 6. [Disclaimer](#6-disclaimer)
 7. [Conclusion](#7-conclusion)
 8. [References](#8-references)
@@ -32,38 +33,35 @@
 
 ## 1. Reconnaissance Introduction
 
-**Maltego** is a graphical **OSINT (Open Source Intelligence) and link-analysis** tool used to map relationships between people, organizations, domains, infrastructure, and other entities. Unlike the command-line tools used in Module 1 (`whois`, `nslookup`, `dnsrecon`), Maltego works by running **"Transforms"** — automated queries against public data sources — and visualizing the results as an interactive node graph. This makes it especially effective for a task like email-address enumeration, where the goal isn't a single data point but a **map of how an organization's people, domain, and infrastructure connect**.
+**theHarvester** is a passive OSINT reconnaissance tool built into Kali Linux. It automates the process of querying multiple public data sources — search engines, DNS, certificate transparency logs, and other OSINT APIs — to collect **email addresses, subdomains, hostnames, open ports, and employee names** associated with a target domain. It was built specifically for the early, pre-engagement stage of a penetration test, to answer the question "how much of this organization's footprint is already public?" before any active scanning begins.
 
-Email harvesting sits firmly in the **passive reconnaissance** category: the data is pulled from public sources (search engines, PGP key servers, breach-data aggregators, social platforms) rather than by directly probing the target's mail servers. However, the *output* of this phase — a list of real employee email addresses — is one of the most directly weaponizable results in the entire reconnaissance process, which is why it carries its own dedicated disclaimer in this report ([Section 6](#6-disclaimer)).
+Because theHarvester queries **third-party data sources** (search engines, APIs) rather than the target's own infrastructure, this is a **passive** technique: the target organization sees no traffic from the tester at all. This module builds directly on Module 3 (Maltego), using a different, more specialized tool to cover the same category of data — public email addresses and subdomains — while also comparing how **source selection** and **result limits** change the completeness of the output.
 
-This module is mapped to **MITRE ATT&CK Technique T1589.002 – Gather Victim Identity Information: Email Addresses**.
+This module is mapped to **MITRE ATT&CK Technique T1589.002 – Gather Victim Identity Information: Email Addresses** and **T1590.005 – Gather Victim Network Information: IP Addresses / DNS**.
 
 ---
 
 ## 2. Task Objectives
 
-| # | Task | Objective |
-|---|------|-----------|
-| 1 | Set up and verify a Maltego account | Establish access to Maltego CE and its built-in Transform Hub, required to run OSINT transforms. |
-| 2 | Run domain-to-email Transforms against the target organization's domain | Enumerate all discoverable email addresses associated with `<target-organization-domain>`, using due permission. |
+| # | Task | Source | Result Limit | Objective |
+|---|------|--------|---------------|-----------|
+| 1 | Find email IDs & subdomains for `microsoft.com` | Baidu | 1000 | Enumerate the footprint discoverable through a single, non-mainstream search engine source. |
+| 2 | Find email IDs & subdomains for `microsoft.com` | All sources | 50 | Enumerate the footprint discoverable by aggregating every configured source, capped at a smaller result limit, and compare coverage against Task 1. |
 
 ---
 
 ## 3. Deliverables
 
 - [x] This `README.md` report documenting the methodology, tool, and findings.
-- [x] Screenshot evidence for each stage of the task:
+- [x] Screenshot evidence for each task, plus a findings document:
 
-| # | Evidence Name | Stage |
-|---|---------------|-------|
-| 1 | `Maltego-ID` | Maltego account / ID overview |
-| 2 | `Login-Link-Options` | Available login methods for Maltego |
-| 3 | `Create-Maltego-ID` | Creating a new Maltego ID |
-| 4 | `Account-Verified` | Account verification confirmation |
-| 5 | `Finding-Email-Address` | Email-address Transform results for the target domain |
+| # | Evidence Name | Description |
+|---|----------------|--------------|
+| 1 | `theHarvester-Result1` | Output of Task 1 (Baidu source, limit 1000). |
+| 2 | `theHarvester-Result2` | Output of Task 2 (all sources, limit 50). |
+| 3 | `Findings-W2-M4.docx` | Full compiled list of discovered email addresses and subdomains from both tasks. |
 
-- [x] Tool definition explained from an attacker's perspective.
-- [x] Disclaimer, conclusion and references.
+> **Handling note:** as with the Maltego module, the full lists of discovered emails/subdomains in `Findings-W2-M4.docx` are real organizational data. Keep that file in your private course submission; don't publish the full list to a public portfolio, GitHub repo, or social media. See [Section 6](#6-disclaimer).
 
 ---
 
@@ -71,92 +69,93 @@ This module is mapped to **MITRE ATT&CK Technique T1589.002 – Gather Victim Id
 
 | # | Tool | Category | Purpose | Type of Recon |
 |---|------|----------|---------|----------------|
-| 1 | **Kali Linux** | Operating System / Platform | Penetration-testing distribution used to run Maltego. | – |
-| 2 | **Maltego (Community Edition)** | OSINT / Link Analysis | Graphical tool that runs Transforms against public data sources to enumerate entities such as email addresses, domains, and infrastructure. | Passive |
+| 1 | **Kali Linux** | Operating System / Platform | Penetration-testing distribution used to run theHarvester. | – |
+| 2 | **theHarvester** | OSINT / Email & Subdomain Enumeration | Aggregates public data sources to collect emails, subdomains, hosts, and related footprint data for a target domain. | Passive |
 
 ---
 
 ## 5. Tool Definition, Attacker Usage & Evidence
 
-### 5.1 Maltego – Definition
+### 5.1 theHarvester – Definition
 
-Maltego represents information as **Entities** (a domain, a person, an email address, a phone number, an IP, etc.) connected by **Links** on a graph. Running a **Transform** on an entity queries a configured data source and returns new, related entities, which Maltego automatically adds to the graph. Chaining transforms (domain → MX records → employee names → email addresses) lets an analyst build a progressively deeper picture of an organization with a few clicks, rather than manually cross-referencing multiple tools.
+theHarvester is run from the command line with a target domain (`-d`), a data source or set of sources (`-b`), and a result limit (`-l`). It supports dozens of source modules, including search engines (Google, Bing, Baidu, Yahoo), certificate transparency logs (`crtsh`), DNS brute-forcing, and specialized OSINT APIs (Shodan, Hunter.io, SecurityTrails, when API keys are configured). Results are normalized and deduplicated into clean lists of emails, hosts/subdomains, and IPs.
 
-### 5.2 How Attackers Use Maltego
+**General command syntax:**
+```bash
+theHarvester -d <domain> -b <source> -l <limit>
+theHarvester -d <domain> -b all -l <limit>
+```
 
-- **Email harvesting for phishing and spear-phishing:** a confirmed list of real employee email addresses, often paired with full names and job titles pulled from the same graph, is the single most useful input for a targeted phishing campaign. Attackers can craft convincing, personalized lures once they know who works where and what their email format is (e.g. `firstname.lastname@domain.com`).
-- **Identifying the organization's email naming convention:** even a handful of harvested addresses reveals the pattern used company-wide, letting an attacker **guess** addresses for employees who weren't directly discovered (e.g. the CFO or an IT administrator).
-- **Building an org chart for social engineering:** Maltego's graph view makes it easy to see reporting structures and departments, which attackers use to impersonate a colleague or executive (pretexting, CEO-fraud/BEC attacks).
-- **Pivoting to infrastructure:** the same domain entity can be transformed toward DNS records, hosting providers, and related domains, linking the human attack surface (email) to the technical attack surface (servers) discovered in earlier modules.
-- **Credential-stuffing preparation:** harvested email addresses are frequently checked against public breach-data dumps to find reused or leaked passwords, turning an OSINT exercise directly into an account-takeover attempt.
+### 5.2 How Attackers Use theHarvester
 
-### 5.3 Evidence Walkthrough
+- **Rapid attack-surface mapping:** a single command returns a consolidated list of subdomains, which attackers use to find forgotten, staging, or poorly secured hosts (e.g. `dev.`, `test.`, `vpn.`, `uat.`) that aren't linked from the main site and are easy to miss manually.
+- **Email harvesting for phishing, at scale:** like Maltego, theHarvester's email results reveal naming conventions and real addresses that feed directly into phishing and password-spraying campaigns.
+- **Source comparison for completeness:** different search engines and data sources index different parts of the internet. An attacker will often run multiple sources (as this module does with Baidu vs. "all") because a subdomain indexed by one search engine may be entirely missing from another — relying on a single source risks an incomplete picture of the target.
+- **Pivoting into active recon:** subdomains discovered here become the direct input list for later active tools (port scanners, `whatweb`, vulnerability scanners from earlier modules), turning a passive list into a prioritized list of live targets to probe next.
+- **Low cost, high value:** because theHarvester only queries third-party sources, an attacker gets a wide view of the target's exposure without sending a single packet to the target's own network — making this phase essentially risk-free and undetectable to the target.
 
-> Screenshots referenced below are stored in the `Evidences-W2-M3/` folder next to this file.
+### 5.3 Task 1 – Baidu Source, Limit 1000
 
-**Step 1 — Maltego ID**
+**Command used:**
+```bash
+theHarvester -d microsoft.com -b baidu -l 1000
+```
 
-![Maltego-ID](./Evidences-W2-M3/Maltego-ID.png)
+**Evidence – theHarvester-Result1:**
 
-Overview of the Maltego ID used to license and authenticate the Community Edition installation.
-
-**Step 2 — Login Link Options**
-
-![Login-Link-Options](./Evidences-W2-M3/Login-Link-Options.png)
-
-The available sign-in methods presented by Maltego (new ID vs. existing ID) before account setup.
-
-**Step 3 — Create Maltego ID**
-
-![Create-Maltego-ID](./Evidences-W2-M3/Create-Maltego-ID.png)
-
-Registration screen used to create a new Maltego ID required to activate the Transform Hub.
-
-**Step 4 — Account Verified**
-
-![Account-Verified](./Evidences-W2-M3/Account-Verified.png)
-
-Confirmation that the Maltego ID was successfully verified, enabling access to Transforms.
-
-**Step 5 — Finding Email Addresses**
-
-![Finding-Email-Address](./Evidences-W2-M3/Finding-Email-Address.png)
-
-Results of running the domain → email-address Transform(s) against `<networkwalks.com`, showing the discovered addresses on the entity graph.
+![theHarvester-Result1](./Evidences-W2-M4/theHarvester-Result1.png)
 
 **Key observations:**
-- Number of email addresses discovered: `1`
-- Data source(s) the Transform pulled from: `Email Address @domain`
+- Number of subdomains found: `<fill in>`
+- Number of email addresses found: `<fill in>`
+- Notable hosts discovered: `<fill in>`
+
+---
+
+### 5.4 Task 2 – All Sources, Limit 50
+
+**Command used:**
+```bash
+theHarvester -d microsoft.com -b all -l 50
+```
+
+**Evidence – theHarvester-Result2:**
+
+![theHarvester-Result2](./Evidences-W2-M4/theHarvester-Result2.png)
+
+
+> **Comparing Task 1 and Task 2:** despite Task 1 allowing a much higher result limit (1000 vs. 50), aggregating **all sources** in Task 2 can surface subdomains and emails that a single source like Baidu never indexed, while Task 1's higher limit can pull deeper into one source's index than Task 2's capped, multi-source run does. `<Add 2–3 sentences on which task yielded more useful/unique results for your actual run, and why.>`
 
 ---
 
 ## 6. Disclaimer
 
-This project was carried out **for educational and authorised security-testing purposes only**, against a target organization for which **explicit written permission** was obtained prior to any OSINT activity. No contact was made with any harvested email address, and no email account was accessed or tested.
+This project was carried out **for educational purposes as part of an authorized training module**. Both tasks used only **passive** OSINT techniques: theHarvester queries third-party search engines and public data sources, never the target organization's own infrastructure directly, so no traffic was sent to Microsoft's systems at any point.
 
-Email-address enumeration deserves particular caution even under valid authorization:
+That said, the same caution applied to the Maltego module (Week 2, Module 3) applies here:
 
-- The output is **personally identifiable information (PII)** belonging to real individuals who are not themselves party to the testing agreement, even though the organization is.
-- Harvested addresses must be **handled, stored, and reported in line with the scope and data-handling terms** of the written permission (and any applicable privacy regulation, e.g. GDPR), not published to a public portfolio, GitHub repository, or social media.
-- This report and its findings must **never** be used to send phishing emails, spam, or any unsolicited communication outside of an explicitly authorized phishing-simulation engagement with its own separate written scope.
+- The emails and subdomains returned are **real organizational data**, some of it tied to identifiable individuals. They must be handled responsibly and in line with this course's scope, not published in full or used for any purpose outside this educational exercise.
+- This report and its findings must **never** be used to send phishing emails, probe discovered subdomains without separate authorization, or attempt access to any system found through this enumeration.
+- Large organizations such as Microsoft often publish their own **responsible disclosure / bug bounty policies** that define what active testing (beyond this passive OSINT exercise) is permitted and by whom; this exercise does not fall under, or substitute for, such a program.
 
-Unauthorized use of these techniques may violate computer-misuse, data-protection, and anti-spam laws (for example the Prevention of Electronic Crimes Act in Pakistan, the CFAA and CAN-SPAM Act in the United States, UK GDPR/Computer Misuse Act, or the EU GDPR). The author accepts no responsibility for any misuse of the information or methodology contained in this document.
+Unauthorized active testing of any discovered subdomain may violate computer-misuse laws (for example the Prevention of Electronic Crimes Act in Pakistan, the CFAA in the United States, or the Computer Misuse Act in the United Kingdom). The author accepts no responsibility for any misuse of the information or methodology contained in this document.
 
 ---
 
 ## 7. Conclusion
 
-This module demonstrated how a single graphical OSINT tool can turn a domain name into a structured map of the humans behind an organization. Maltego's transform-and-graph approach made it straightforward to go from "a domain" to "a list of real, discoverable email addresses" in just a few steps, each one documented here through the account setup process and the final Transform run.
+This module highlighted how much of an organization's footprint — email naming patterns, subdomains, and infrastructure hints — is sitting in public search-engine indexes, retrievable with a single command and zero direct contact with the target. Comparing a single-source run (Baidu, limit 1000) against an all-sources run (limit 50) also showed that **source breadth matters as much as result limit**: no single data source has complete coverage, so a thorough OSINT assessment should combine multiple sources rather than relying on one, however high its limit is set.
 
-The security takeaway is that **an organization's email footprint is almost always larger than it expects**, built from data employees and the company itself have published over years (press releases, conference bios, GitHub commits, social media, data breaches). The practical mitigations are to **minimize the amount of personal data published publicly, enforce strong and unique passwords across all accounts (reducing the impact of credential-stuffing from harvested emails), deploy phishing-awareness training**, and use email-authentication standards (SPF, DKIM, DMARC — as checked in Module 1's `dnsrecon` results) to make spoofed messages easier to detect and block.
+For defenders, the lesson mirrors Module 3's: minimize what's indexable in the first place. Deprecate and remove DNS records for unused subdomains, avoid publishing employee emails in a predictable, easily-guessable format, and monitor certificate transparency logs for unexpected subdomains being issued under the organization's name.
 
 ---
 
 ## 8. References
 
-1. MITRE ATT&CK – Gather Victim Identity Information: Email Addresses (T1589.002): <https://attack.mitre.org/techniques/T1589/002/>
-2. MITRE ATT&CK – Reconnaissance (TA0043): <https://attack.mitre.org/tactics/TA0043/>
-3. OWASP Web Security Testing Guide – Information Gathering: <https://owasp.org/www-project-web-security-testing-guide/>
-4. Maltego – Official Documentation: <https://docs.maltego.com/>
-5. Maltego – Transform Hub: <https://www.maltego.com/transform-hub/>
-6. NIST SP 800-115 – Technical Guide to Information Security Testing and Assessment: <https://csrc.nist.gov/publications/detail/sp/800-115/final>
+1. theHarvester – Official GitHub Repository: <https://github.com/laramies/theHarvester>
+2. MITRE ATT&CK – Gather Victim Identity Information: Email Addresses (T1589.002): <https://attack.mitre.org/techniques/T1589/002/>
+3. MITRE ATT&CK – Gather Victim Network Information (T1590): <https://attack.mitre.org/techniques/T1590/>
+4. MITRE ATT&CK – Reconnaissance (TA0043): <https://attack.mitre.org/tactics/TA0043/>
+5. OWASP Web Security Testing Guide – Information Gathering: <https://owasp.org/www-project-web-security-testing-guide/>
+6. Kali Linux Tools – theHarvester: <https://www.kali.org/tools/theharvester/>
+7. NIST SP 800-115 – Technical Guide to Information Security Testing and Assessment: <https://csrc.nist.gov/publications/detail/sp/800-115/final>
