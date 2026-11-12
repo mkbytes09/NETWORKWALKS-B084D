@@ -124,7 +124,7 @@ theHarvester -d microsoft.com -b all -l 50
 ![theHarvester-Result2](./Evidences-W2-M4/theHarvester-Result2.png)
 
 
-> **Comparing Task 1 and Task 2:** despite Task 1 allowing a much higher result limit (1000 vs. 50), aggregating **all sources** in Task 2 can surface subdomains and emails that a single source like Baidu never indexed, while Task 1's higher limit can pull deeper into one source's index than Task 2's capped, multi-source run does. `<Add 2–3 sentences on which task yielded more useful/unique results for your actual run, and why.>`
+> **Comparing Task 1 and Task 2:** despite Task 1 allowing a much higher result limit (1000 vs. 50), aggregating **all sources** in Task 2 can surface subdomains and emails that a single source like Baidu never indexed, while Task 1's higher limit can pull deeper into one source's index than Task 2's capped, multi-source run does.
 
 ---
 
