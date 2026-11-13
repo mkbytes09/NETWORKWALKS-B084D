@@ -79,7 +79,7 @@ Each module lives in its own subdirectory with a dedicated `README.md` covering 
 
 ## Final Consolidated Report
 
-`Footprinting-Network-Scanning-Phases-Report.docx` ties all five modules above into a single formal report, structured as:
+`Footprinting-Network-Scanning-Phases-Report.pdf` ties all five modules above into a single formal report, structured as:
 
 1. Liability Disclaimer
 2. Introduction
