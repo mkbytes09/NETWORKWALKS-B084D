@@ -105,11 +105,6 @@ theHarvester -d microsoft.com -b baidu -l 1000
 
 ![theHarvester-Result1](./Evidences-W2-M4/theHarvester-Result1.png)
 
-**Key observations:**
-- Number of subdomains found: `<fill in>`
-- Number of email addresses found: `<fill in>`
-- Notable hosts discovered: `<fill in>`
-
 ---
 
 ### 5.4 Task 2 – All Sources, Limit 50
