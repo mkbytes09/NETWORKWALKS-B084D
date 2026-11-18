@@ -89,8 +89,6 @@ John the Ripper is the same password-cracking tool used in the earlier manual ta
 
 ### 5.4 Evidence Walkthrough
 
-> Screenshots referenced below are stored in the `evidence/` folder next to this file. Update the path if your repository uses a different folder name.
-
 **Step 1 — HexStrike MCP Server Running**
 
 ![Hextrike-MCP-Server-Running](./Evidences-W3/Hextrike-MCP-Server-Running.png)
@@ -107,7 +105,7 @@ Claude Desktop's MCP server configuration, showing HexStrike AI listed and conne
 
 ![Prompt1-Result](./Evidences-W3/Prompt1-Result.png)
 
-The operator's initial prompt to Claude, directing it toward cracking `networkwalks_flag1.pdf`, and the agent's first response/tool call.
+The operator's initial prompt to Claude, directing it toward cracking `Locked File.pdf`, and the agent's first response/tool call.
 
 **Step 4 — Prompt 2 Result**
 
