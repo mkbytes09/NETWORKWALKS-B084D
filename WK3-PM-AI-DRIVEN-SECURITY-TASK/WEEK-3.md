@@ -2,8 +2,11 @@
 ## HexStrike AI MCP + Claude Desktop + John the Ripper (Kali Linux)
 
 > **Target file:** My Locked PDF1.pdf (own/training file)
+
 > **Platform:** Kali Linux / HexStrike AI MCP Server v6.0 / Claude Desktop
+
 > **Author:** Muhammad Kamil
+
 > **Program / Batch:** NETWORKWALKS-B084D
 
 ---
