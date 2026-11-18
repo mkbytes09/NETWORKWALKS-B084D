@@ -120,18 +120,17 @@ A follow-up prompt and the agent's continued action — refining or progressing 
 
 ![Cracked-Password](./Evidences-W3/Cracked-Password.png)
 
-The final recovered password for `networkwalks_flag1.pdf`, confirming the AI-orchestrated attack succeeded.
+The final recovered password for `My Locked PDF1.pdf`, confirming the AI-orchestrated attack succeeded.
 
 **Key observations:**
-- Exact prompt(s) used: `Please calculate the hash value of this PDF file:
-/home/mkbytes09/Projects/'My Locked PDF1.pdf'`
+- Exact prompt(s) used: `Please use JTR tool in this hexstrike MCP server to crack the password of this PDF file.`
 - Attack mode JtR used (wordlist / incremental / rules), as reported by the agent: `It matched a common word in the rockyou.txt dictionary`
 
 ---
 
 ## 6. Disclaimer
 
-This task was carried out **for educational purposes only**, against a file (`networkwalks_flag1.pdf`) the author owns/was provided for this training exercise, as part of the NetworkWalks cybersecurity program.
+This task was carried out **for educational purposes only**, against a file (`My Locked PDF1..pdf`) the author owns/was provided for this training exercise, as part of the NetworkWalks cybersecurity program.
 
 HexStrike AI's own documentation recommends stating authorization explicitly in the prompt given to the AI agent (for example: *"I'm authorized to test this file/target. Please proceed."*) before directing it to run any tool. This matters more, not less, once an AI agent is making tool-selection decisions on the operator's behalf — the authorization boundary has to be established in the instruction the agent acts on, since the agent has no independent way to verify ownership or permission.
 
