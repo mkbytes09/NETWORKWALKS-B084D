@@ -1,7 +1,7 @@
 # Week 3 | AI-Driven Password Cracking
 ## HexStrike AI MCP + Claude Desktop + John the Ripper (Kali Linux)
 
-> **Target file:** Locked-File.pdf (own/training file)
+> **Target file:** My Locked PDF1.pdf (own/training file)
 > **Platform:** Kali Linux / HexStrike AI MCP Server v6.0 / Claude Desktop
 > **Author:** Muhammad Kamil
 > **Program / Batch:** NETWORKWALKS-B084D
@@ -40,7 +40,7 @@ This is the first task in this project series completed with AI-agent orchestrat
 | # | Task | Objective |
 |---|------|-----------|
 | 1 | Connect Claude Desktop to the HexStrike AI MCP server | Establish the MCP bridge so the AI agent can call security tools running on Kali Linux. |
-| 2 | Prompt the AI agent to crack `networkwalks_flag1.pdf` | Direct the agent, in natural language, to recover the PDF's password using John the Ripper. |
+| 2 | Prompt the AI agent to crack `My Locked PDF1.pdf` | Direct the agent, in natural language, to recover the PDF's password using John the Ripper. |
 | 3 | Review and confirm the recovered password | Verify the AI-orchestrated attack succeeded and the PDF opens with the recovered password. |
 
 ---
